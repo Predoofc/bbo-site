@@ -1,0 +1,4 @@
+v1.3 — 12/07/2026 — redesign visual: hero escuro centralizado com o logo em creme, tipografia display (Archivo Expanded), áreas de atuação em lista indexada, cartões de equipe com monograma, cabeçalho dinâmico e revelação suave no scroll; todos os textos inalterados
+v1.2 — 12/07/2026 — imagens convertidas para WebP (logo, mapa, fachada; −62%); favicon.svg removido (mantidos favicon.png e apple-touch-icon); aviso OAB no painel admin; documentação atualizada (proveniência do mapa e justificativa da linha complementar)
+v1.1 — 12/07/2026 — tipografia 100% sem serifa (Inter também nos títulos); logo real no hero; mapa estático e fachada do escritório na seção Contato; favicon derivado do monograma do logo real (SVG + PNG + apple-touch-icon); removida, a pedido, a linha complementar abaixo dos cards de Serviços
+v1.0 — 11/07/2026 — versão inicial

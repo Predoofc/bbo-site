@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Painel de edição — BBO Advocacia</title>
+  <style>
+    :root {
+      --fundo: #FBFAF7;
+      --texto: #1C1F23;
+      --secundario: #6B7076;
+      --linha: #E7E4DD;
+      --acento: #8C6A3F;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--fundo);
+      color: var(--texto);
+      font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .aviso-fixo {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: var(--texto);
+      color: var(--fundo);
+      text-align: center;
+      padding: 10px 16px;
+      font-size: 13px;
+    }
+
+    .miolo {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 28px 20px 80px;
+    }
+
+    h1 {
+      font-weight: 600;
+      font-size: 26px;
+      letter-spacing: -0.02em;
+      margin: 8px 0 4px;
+    }
+
+    .sub {
+      color: var(--secundario);
+      margin: 0 0 20px;
+    }
+
+    ol.instrucoes {
+      background: #fff;
+      border: 1px solid var(--linha);
+      padding: 16px 16px 16px 38px;
+      margin: 0 0 28px;
+    }
+
+    ol.instrucoes li { margin: 4px 0; }
+
+    fieldset {
+      border: 1px solid var(--linha);
+      background: #fff;
+      padding: 16px 20px 20px;
+      margin: 0 0 20px;
+    }
+
+    legend {
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      padding: 0 8px;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--secundario);
+      margin: 14px 0 4px;
+    }
+
+    input[type="text"],
+    textarea {
+      display: block;
+      width: 100%;
+      padding: 9px 10px;
+      border: 1px solid var(--linha);
+      background: var(--fundo);
+      font: inherit;
+      text-transform: none;
+      letter-spacing: normal;
+      color: var(--texto);
+      margin-top: 4px;
+    }
+
+    input:focus,
+    textarea:focus {
+      outline: 2px solid var(--acento);
+      outline-offset: 1px;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 76px;
+    }
+
+    .dupla {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 16px;
+    }
+
+    @media (max-width: 640px) {
+      .dupla { grid-template-columns: 1fr; }
+    }
+
+    .dica {
+      font-size: 13px;
+      color: var(--secundario);
+      margin: 10px 0 0;
+    }
+
+    .membro-bloco,
+    .card-item {
+      border: 1px dashed var(--linha);
+      padding: 2px 14px 14px;
+      margin-top: 14px;
+    }
+
+    button { font: inherit; cursor: pointer; }
+
+    .botao-primario {
+      display: block;
+      width: 100%;
+      margin-top: 8px;
+      background: var(--texto);
+      color: var(--fundo);
+      border: 1px solid var(--texto);
+      padding: 14px 20px;
+      font-size: 15px;
+      letter-spacing: 0.03em;
+    }
+
+    .botao-primario:hover {
+      background: var(--acento);
+      border-color: var(--acento);
+    }
+
+    .botao-secundario {
+      background: none;
+      border: 1px solid var(--texto);
+      color: var(--texto);
+      padding: 8px 14px;
+      margin-top: 14px;
+    }
+
+    .botao-remover {
+      background: none;
+      border: 1px solid var(--linha);
+      color: var(--secundario);
+      padding: 5px 10px;
+      font-size: 13px;
+      margin-top: 10px;
+    }
+
+    .botao-remover:hover {
+      border-color: #a33d3d;
+      color: #a33d3d;
+    }
+
+    .mensagem-erro {
+      display: none;
+      background: #fbeaea;
+      border: 1px solid #d9a0a0;
+      color: #7a2020;
+      padding: 12px 14px;
+      margin: 0 0 14px;
+    }
+
+    .mensagem-ok {
+      display: none;
+      background: #eef3ea;
+      border: 1px solid #b5c9a8;
+      color: #33531f;
+      padding: 12px 14px;
+      margin: 14px 0 0;
+    }
+
+    .visivel { display: block; }
+
+    .aviso-oab {
+      background: #FAF6EF;
+      border: 1px solid var(--acento);
+      color: var(--texto);
+      font-size: 13px;
+      padding: 10px 14px;
+      margin: 0 0 20px;
+    }
+
+    #falha-carga {
+      display: none;
+      background: #fbeaea;
+      border: 1px solid #d9a0a0;
+      color: #7a2020;
+      padding: 14px;
+      margin-bottom: 20px;
+    }
+
+    #falha-carga.visivel { display: block; }
+
+    code {
+      background: var(--linha);
+      padding: 1px 5px;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <div class="aviso-fixo">Este painel funciona somente no seu computador. Nada é enviado a servidor algum.</div>
+
+  <div class="miolo">
+    <h1>Painel de edição — site BBO</h1>
+    <p class="sub">Edita o conteúdo de <code>docs/content.js</code> sem mexer em código.</p>
+
+    <ol class="instrucoes">
+      <li>Edite os campos.</li>
+      <li>Baixe o content.js.</li>
+      <li>Substitua <code>docs/content.js</code> pelo arquivo baixado.</li>
+      <li>Abra <code>docs/index.html</code> e confira.</li>
+      <li>Suba o content.js novo no GitHub.</li>
+    </ol>
+
+    <p class="aviso-oab">⚖️ Texto novo só entra no site com aprovação prévia — site de advocacia não pode prometer resultado, usar superlativo nem fazer captação de clientela (Provimento 205/2021 da OAB).</p>
+
+    <div id="falha-carga">
+      Não foi possível carregar <code>../docs/content.js</code>. Mantenha a estrutura de pastas
+      original (a pasta <code>admin/</code> ao lado da pasta <code>docs/</code>) e abra este
+      arquivo a partir dela.
+    </div>
+
+    <form id="formulario" novalidate hidden>
+      <fieldset>
+        <legend>Marca (barra de navegação)</legend>
+        <div class="dupla">
+          <div>
+            <label for="campo-marca-completa">Nome completo</label>
+            <input type="text" id="campo-marca-completa">
+          </div>
+          <div>
+            <label for="campo-marca-curta">Nome curto (telas pequenas)</label>
+            <input type="text" id="campo-marca-curta">
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Menu de navegação</legend>
+        <div id="menu-campos"></div>
+        <p class="dica">As âncoras devem apontar para as seções do site: #inicio, #sobre, #servicos, #equipe e #contato.</p>
+      </fieldset>
+
+      <fieldset>
+        <legend>Hero (abertura)</legend>
+        <label for="campo-hero-titulo">Título</label>
+        <input type="text" id="campo-hero-titulo">
+        <label for="campo-hero-subtitulo">Subtítulo</label>
+        <input type="text" id="campo-hero-subtitulo">
+        <label for="campo-hero-botao">Rótulo do botão</label>
+        <input type="text" id="campo-hero-botao">
+      </fieldset>
+
+      <fieldset>
+        <legend>O escritório</legend>
+        <label for="campo-escritorio-titulo">Título da seção</label>
+        <input type="text" id="campo-escritorio-titulo">
+        <label for="campo-escritorio-paragrafo">Parágrafo</label>
+        <textarea id="campo-escritorio-paragrafo" rows="5"></textarea>
+      </fieldset>
+
+      <fieldset>
+        <legend>Serviços</legend>
+        <label for="campo-servicos-titulo">Título da seção</label>
+        <input type="text" id="campo-servicos-titulo">
+        <label for="campo-servicos-introducao">Introdução</label>
+        <textarea id="campo-servicos-introducao" rows="3"></textarea>
+        <div id="cards-campos"></div>
+        <label for="campo-servicos-complemento">Linha complementar (abaixo dos cards)</label>
+        <input type="text" id="campo-servicos-complemento">
+      </fieldset>
+
+      <fieldset>
+        <legend>Equipe</legend>
+        <label for="campo-equipe-titulo">Título da seção</label>
+        <input type="text" id="campo-equipe-titulo">
+        <div id="equipe-campos"></div>
+        <button type="button" id="adicionar-membro" class="botao-secundario">Adicionar integrante</button>
+      </fieldset>
+
+      <fieldset>
+        <legend>Faixa de chamada</legend>
+        <label for="campo-chamada-texto">Texto</label>
+        <input type="text" id="campo-chamada-texto">
+        <label for="campo-chamada-botao">Rótulo do botão (envia e-mail para o endereço da seção Contato)</label>
+        <input type="text" id="campo-chamada-botao">
+      </fieldset>
+
+      <fieldset>
+        <legend>Contato</legend>
+        <label for="campo-contato-titulo">Título da seção</label>
+        <input type="text" id="campo-contato-titulo">
+        <label for="campo-contato-email">E-mail *</label>
+        <input type="text" id="campo-contato-email">
+        <label for="campo-contato-endereco">Endereço *</label>
+        <input type="text" id="campo-contato-endereco">
+        <label for="campo-contato-mapa-rotulo">Rótulo do link do mapa</label>
+        <input type="text" id="campo-contato-mapa-rotulo">
+        <label for="campo-contato-mapa-url">Link do mapa (URL)</label>
+        <input type="text" id="campo-contato-mapa-url">
+        <label for="campo-contato-cnpj">CNPJ (linha exibida na seção)</label>
+        <input type="text" id="campo-contato-cnpj">
+      </fieldset>
+
+      <fieldset>
+        <legend>Rodapé</legend>
+        <label for="campo-rodape-linha1">Linha 1 *</label>
+        <input type="text" id="campo-rodape-linha1">
+        <label for="campo-rodape-linha2">Linha 2 *</label>
+        <input type="text" id="campo-rodape-linha2">
+        <label for="campo-rodape-linha3">Linha 3 *</label>
+        <input type="text" id="campo-rodape-linha3">
+        <label for="campo-rodape-assinatura">Assinatura da linha 4 *</label>
+        <input type="text" id="campo-rodape-assinatura">
+        <p class="dica">A linha 4 é montada pelo site como “© ano corrente + assinatura”. O ano é atualizado automaticamente.</p>
+      </fieldset>
+
+      <p id="mensagem-erro" class="mensagem-erro" role="alert"></p>
+      <button type="submit" class="botao-primario">Baixar content.js atualizado</button>
+      <p id="mensagem-ok" class="mensagem-ok"></p>
+    </form>
+  </div>
+
+  <script src="../docs/content.js"></script>
+  <script>
+    (function () {
+      "use strict";
+
+      var conteudo = window.SITE_CONTENT;
+      var formulario = document.getElementById("formulario");
+
+      if (!conteudo) {
+        document.getElementById("falha-carga").classList.add("visivel");
+        return;
+      }
+      formulario.hidden = false;
+
+      function definir(id, valor) {
+        document.getElementById(id).value = typeof valor === "string" ? valor : "";
+      }
+
+      function ler(id) {
+        return document.getElementById(id).value;
+      }
+
+      function campoDinamico(rotulo, classe, valor, ehTextarea) {
+        var etiqueta = document.createElement("label");
+        etiqueta.textContent = rotulo;
+        var entrada = document.createElement(ehTextarea ? "textarea" : "input");
+        if (!ehTextarea) {
+          entrada.type = "text";
+        } else {
+          entrada.rows = 3;
+        }
+        entrada.className = classe;
+        entrada.value = typeof valor === "string" ? valor : "";
+        etiqueta.appendChild(entrada);
+        return etiqueta;
+      }
+
+      function valoresDe(raiz, seletor) {
+        return [].map.call(raiz.querySelectorAll(seletor), function (no) {
+          return no.value;
+        });
+      }
+
+      /* --- Preenchimento com os valores atuais --- */
+
+      definir("campo-marca-completa", conteudo.marca.completa);
+      definir("campo-marca-curta", conteudo.marca.curta);
+
+      var menuCampos = document.getElementById("menu-campos");
+      (conteudo.menu || []).forEach(function (item, indice) {
+        var bloco = document.createElement("div");
+        bloco.className = "dupla";
+        var esquerda = document.createElement("div");
+        esquerda.appendChild(campoDinamico("Rótulo do item " + (indice + 1), "menu-rotulo", item.rotulo));
+        var direita = document.createElement("div");
+        direita.appendChild(campoDinamico("Âncora do item " + (indice + 1), "menu-ancora", item.ancora));
+        bloco.appendChild(esquerda);
+        bloco.appendChild(direita);
+        menuCampos.appendChild(bloco);
+      });
+
+      definir("campo-hero-titulo", conteudo.hero.titulo);
+      definir("campo-hero-subtitulo", conteudo.hero.subtitulo);
+      definir("campo-hero-botao", conteudo.hero.botao);
+
+      definir("campo-escritorio-titulo", conteudo.escritorio.titulo);
+      definir("campo-escritorio-paragrafo", conteudo.escritorio.paragrafo);
+
+      definir("campo-servicos-titulo", conteudo.servicos.titulo);
+      definir("campo-servicos-introducao", conteudo.servicos.introducao);
+      var cardsCampos = document.getElementById("cards-campos");
+      (conteudo.servicos.cards || []).forEach(function (carta, indice) {
+        var bloco = document.createElement("div");
+        bloco.className = "card-item";
+        bloco.appendChild(campoDinamico("Título do card " + (indice + 1), "card-titulo", carta.titulo));
+        bloco.appendChild(campoDinamico("Texto do card " + (indice + 1), "card-texto", carta.texto, true));
+        cardsCampos.appendChild(bloco);
+      });
+      definir("campo-servicos-complemento", conteudo.servicos.complemento);
+
+      definir("campo-equipe-titulo", conteudo.equipe.titulo);
+      var equipeCampos = document.getElementById("equipe-campos");
+      function blocoMembro(membro) {
+        var bloco = document.createElement("div");
+        bloco.className = "membro-bloco";
+        bloco.appendChild(campoDinamico("Nome", "membro-nome", membro.nome));
+        bloco.appendChild(campoDinamico("Registros (OAB)", "membro-registros", membro.registros));
+        bloco.appendChild(campoDinamico("Bio (opcional — se vazia, não aparece no site)", "membro-bio", membro.bio, true));
+        var remover = document.createElement("button");
+        remover.type = "button";
+        remover.className = "botao-remover";
+        remover.textContent = "Remover integrante";
+        remover.addEventListener("click", function () {
+          bloco.remove();
+        });
+        bloco.appendChild(remover);
+        return bloco;
+      }
+      (conteudo.equipe.membros || []).forEach(function (membro) {
+        equipeCampos.appendChild(blocoMembro(membro));
+      });
+      document.getElementById("adicionar-membro").addEventListener("click", function () {
+        equipeCampos.appendChild(blocoMembro({ nome: "", registros: "", bio: "" }));
+      });
+
+      definir("campo-chamada-texto", conteudo.chamada.texto);
+      definir("campo-chamada-botao", conteudo.chamada.botao);
+
+      definir("campo-contato-titulo", conteudo.contato.titulo);
+      definir("campo-contato-email", conteudo.contato.email);
+      definir("campo-contato-endereco", conteudo.contato.endereco);
+      definir("campo-contato-mapa-rotulo", conteudo.contato.mapaRotulo);
+      definir("campo-contato-mapa-url", conteudo.contato.mapaUrl);
+      definir("campo-contato-cnpj", conteudo.contato.cnpj);
+
+      definir("campo-rodape-linha1", conteudo.rodape.linha1);
+      definir("campo-rodape-linha2", conteudo.rodape.linha2);
+      definir("campo-rodape-linha3", conteudo.rodape.linha3);
+      definir("campo-rodape-assinatura", conteudo.rodape.assinatura);
+
+      /* --- Coleta, validação e download --- */
+
+      function coletar() {
+        var rotulosMenu = valoresDe(menuCampos, ".menu-rotulo");
+        var ancorasMenu = valoresDe(menuCampos, ".menu-ancora");
+        var titulosCards = valoresDe(cardsCampos, ".card-titulo");
+        var textosCards = valoresDe(cardsCampos, ".card-texto");
+        var nomes = valoresDe(equipeCampos, ".membro-nome");
+        var registros = valoresDe(equipeCampos, ".membro-registros");
+        var bios = valoresDe(equipeCampos, ".membro-bio");
+
+        return {
+          marca: {
+            completa: ler("campo-marca-completa"),
+            curta: ler("campo-marca-curta")
+          },
+          menu: rotulosMenu.map(function (rotulo, i) {
+            return { rotulo: rotulo, ancora: ancorasMenu[i] };
+          }),
+          hero: {
+            titulo: ler("campo-hero-titulo"),
+            subtitulo: ler("campo-hero-subtitulo"),
+            botao: ler("campo-hero-botao")
+          },
+          escritorio: {
+            titulo: ler("campo-escritorio-titulo"),
+            paragrafo: ler("campo-escritorio-paragrafo")
+          },
+          servicos: {
+            titulo: ler("campo-servicos-titulo"),
+            introducao: ler("campo-servicos-introducao"),
+            cards: titulosCards.map(function (titulo, i) {
+              return { titulo: titulo, texto: textosCards[i] };
+            }),
+            complemento: ler("campo-servicos-complemento")
+          },
+          equipe: {
+            titulo: ler("campo-equipe-titulo"),
+            membros: nomes.map(function (nome, i) {
+              return { nome: nome, registros: registros[i], bio: bios[i] };
+            })
+          },
+          chamada: {
+            texto: ler("campo-chamada-texto"),
+            botao: ler("campo-chamada-botao")
+          },
+          contato: {
+            titulo: ler("campo-contato-titulo"),
+            email: ler("campo-contato-email"),
+            endereco: ler("campo-contato-endereco"),
+            mapaRotulo: ler("campo-contato-mapa-rotulo"),
+            mapaUrl: ler("campo-contato-mapa-url"),
+            cnpj: ler("campo-contato-cnpj")
+          },
+          rodape: {
+            linha1: ler("campo-rodape-linha1"),
+            linha2: ler("campo-rodape-linha2"),
+            linha3: ler("campo-rodape-linha3"),
+            assinatura: ler("campo-rodape-assinatura")
+          }
+        };
+      }
+
+      function validar(dados) {
+        var faltando = [];
+        if (!dados.contato.email.trim()) { faltando.push("E-mail (Contato)"); }
+        if (!dados.contato.endereco.trim()) { faltando.push("Endereço (Contato)"); }
+        if (!dados.rodape.linha1.trim()) { faltando.push("Rodapé — linha 1"); }
+        if (!dados.rodape.linha2.trim()) { faltando.push("Rodapé — linha 2"); }
+        if (!dados.rodape.linha3.trim()) { faltando.push("Rodapé — linha 3"); }
+        if (!dados.rodape.assinatura.trim()) { faltando.push("Rodapé — assinatura da linha 4"); }
+        return faltando;
+      }
+
+      function gerarArquivo(dados) {
+        return "window.SITE_CONTENT = " + JSON.stringify(dados, null, 2) + ";\n";
+      }
+
+      formulario.addEventListener("submit", function (evento) {
+        evento.preventDefault();
+
+        var erro = document.getElementById("mensagem-erro");
+        var ok = document.getElementById("mensagem-ok");
+        var dados = coletar();
+        var faltando = validar(dados);
+
+        if (faltando.length) {
+          erro.textContent = "Para baixar, preencha os campos essenciais: " + faltando.join("; ") + ".";
+          erro.classList.add("visivel");
+          ok.classList.remove("visivel");
+          erro.scrollIntoView({ behavior: "smooth", block: "center" });
+          return;
+        }
+
+        erro.classList.remove("visivel");
+
+        var blob = new Blob([gerarArquivo(dados)], { type: "text/javascript" });
+        var url = URL.createObjectURL(blob);
+        var atalho = document.createElement("a");
+        atalho.href = url;
+        atalho.download = "content.js";
+        document.body.appendChild(atalho);
+        atalho.click();
+        atalho.remove();
+        setTimeout(function () {
+          URL.revokeObjectURL(url);
+        }, 1000);
+
+        ok.textContent = "content.js gerado. Substitua docs/content.js pelo arquivo baixado.";
+        ok.classList.add("visivel");
+      });
+
+      /* Disponíveis para conferência manual no console do navegador. */
+      window.coletarConteudo = coletar;
+      window.gerarConteudoAtualizado = function () {
+        return gerarArquivo(coletar());
+      };
+    })();
+  </script>
+</body>
+</html>
