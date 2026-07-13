@@ -480,7 +480,7 @@ img {
 /* ---------- equipe ---------- */
 .equipe {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
   gap: 28px;
 }
 
@@ -566,6 +566,20 @@ img {
   font-size: clamp(26px, 3.4vw, 42px);
   letter-spacing: -0.01em;
   line-height: 1.2;
+}
+
+.aviso-copiado {
+  flex-basis: 100%;
+  text-align: right;
+  font-size: 13.5px;
+  letter-spacing: 0.04em;
+  color: var(--acento-claro);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.aviso-copiado.visivel {
+  opacity: 1;
 }
 
 /* ---------- contato ---------- */
@@ -698,10 +712,6 @@ a.contato-valor:focus-visible {
 
   .sobre-fixo {
     position: static;
-  }
-
-  .equipe {
-    grid-template-columns: 1fr;
   }
 }
 

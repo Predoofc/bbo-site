@@ -50,6 +50,11 @@ window.SITE_CONTENT = {
         "nome": "Daniella Soares de Omena",
         "registros": "OAB/AL 6.603",
         "bio": ""
+      },
+      {
+        "nome": "Luzilene Pinto",
+        "registros": "Administradora",
+        "bio": ""
       }
     ]
   },

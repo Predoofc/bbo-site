@@ -65,11 +65,12 @@ para `file://`) e revisão cruzada por 4 agentes independentes contra a especifi
    WebP — nomes e tamanhos atuais na seção "Atualização v1.2" abaixo.)*
 2. **Bios dos sócios** — os campos existem em `content.js` e no painel admin, hoje
    vazios (e por isso não aparecem no site). Preencher pelo painel quando houver texto.
-3. **Fase do domínio www.bbo.adv.br** (executar depois, com adulto no circuito):
-   no Registro.br, criar CNAME de "www" apontando para `<usuario>.github.io`;
-   configurar redirecionamento do domínio raiz; renomear `docs/CNAME.exemplo` para
-   `CNAME` (ou usar Settings → Pages → Custom domain); ativar Enforce HTTPS.
-   Passo a passo completo no README.md.
+3. **Fase do domínio www.bbo.adv.br** — ~~executar depois~~ **Resolvido em
+   12/07/2026:** DNS configurado no Registro.br (CNAME `www` →
+   `predoofc.github.io` + 4 registros A da raiz para os IPs do GitHub Pages,
+   com MX/TXT do Zoho preservados — e-mail intacto); domínio customizado ativado
+   em Settings → Pages; site respondendo com HTTPS em https://www.bbo.adv.br,
+   com redirecionamento da raiz e da URL provisória.
 4. **Publicação no GitHub Pages** — será feita manualmente pela interface web
    (fluxo detalhado no README.md); este repositório local não tem remoto e nada
    foi enviado a servidor algum.
@@ -118,3 +119,19 @@ para `file://`) e revisão cruzada por 4 agentes independentes contra a especifi
 - **Arquivos a republicar no GitHub** para esta versão entrar no ar:
   `docs/index.html`, `docs/style.css`, `docs/site.js` e
   `docs/assets/logo-bbo-claro.webp` (os demais permanecem iguais).
+
+## Atualização v1.4 — 13/07/2026
+
+- **Botão "Enviar e-mail" com retorno garantido.** Diagnóstico: o site publicado
+  estava correto; o "não funciona" relatado é o comportamento do Windows sem
+  aplicativo de e-mail configurado, em que o clique num link `mailto:` não
+  produz efeito visível. Correção: o clique continua abrindo o mailto e passa a
+  copiar o endereço para a área de transferência, exibindo-o na tela
+  ("E-mail copiado: contato@bbo.adv.br" — ou apenas "E-mail: ..." quando a
+  cópia não é permitida). Texto do botão inalterado.
+- **Equipe:** incluída, a pedido do cliente (13/07/2026), **Luzilene Pinto —
+  Administradora** ao lado dos dois sócios, com o cargo no campo de registros;
+  a grade da seção passou a acomodar qualquer número de integrantes. Rótulo do
+  campo no painel admin ajustado para "Registros (OAB) ou função".
+- **Arquivos a republicar no GitHub:** `docs/content.js`, `docs/site.js`,
+  `docs/style.css` e `admin/admin.html` (o `docs/index.html` não mudou).

@@ -124,6 +124,35 @@
   var chamadaBotao = botaoComSeta("chamada-botao", conteudo.chamada.botao);
   if (chamadaBotao) {
     chamadaBotao.href = "mailto:" + conteudo.contato.email;
+    /* Nem todo computador tem aplicativo de e-mail: além de abrir o mailto,
+       o clique copia o endereço e o exibe na tela. */
+    chamadaBotao.addEventListener("click", function () {
+      var endereco = conteudo.contato.email;
+      function avisar(copiou) {
+        var aviso = document.getElementById("aviso-copiado");
+        if (!aviso) {
+          aviso = document.createElement("span");
+          aviso.id = "aviso-copiado";
+          aviso.className = "aviso-copiado";
+          aviso.setAttribute("role", "status");
+          chamadaBotao.insertAdjacentElement("afterend", aviso);
+        }
+        aviso.textContent = copiou ? "E-mail copiado: " + endereco : "E-mail: " + endereco;
+        aviso.classList.add("visivel");
+        clearTimeout(aviso.dataset.timer);
+        aviso.dataset.timer = setTimeout(function () {
+          aviso.classList.remove("visivel");
+        }, 5000);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(endereco).then(
+          function () { avisar(true); },
+          function () { avisar(false); }
+        );
+      } else {
+        avisar(false);
+      }
+    });
   }
 
   /* Contato */
